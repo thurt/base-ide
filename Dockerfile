@@ -3,9 +3,9 @@ FROM debian:stretch
 ENV LOCALE=en_US.UTF-8 \
     SHELL=zsh \
     EDITOR=vim \
-    DOCKER_VERSION=17.09.0-ce \
-    PROTOC_VERSION=3.4.0 \
-    PYTHON_PIP_VERSION=9.0.1 \
+    DOCKER_VERSION=18.03.0-ce \
+    PROTOC_VERSION=3.5.1 \
+    PYTHON_PIP_VERSION=10.0.0 \
     SCMPUFF_VERSION=0.2.1 \
     HUB_VERSION=2.2.9 \
     DEVD_VERSION=0.8
@@ -93,6 +93,7 @@ RUN echo 'FOR CROSS-VERIFICATION, PLEASE CHECK THAT THE SHA256 RSA HASH ON STDOU
     mkdir /home/user/.ssh && \
     ssh-keyscan -t rsa github.com,192.30.252.*,192.30.253.*,192.30.254.*,192.30.255.* | tee -a /home/user/.ssh/known_hosts | ssh-keygen -lf -
 
+#INSTALL vim plugins
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle && \
     git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
     curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim && \
@@ -102,11 +103,15 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle && \
     git clone https://github.com/leafgarland/typescript-vim.git ~/.vim/bundle/typescript-vim && \
     git clone https://github.com/prettier/vim-prettier ~/.vim/bundle/vim-prettier
 
+#complete YCM setup
+RUN cd /home/user/.vim/bundle/YouCompleteMe && \
+    git submodule update --init --recursive
+
+#INSTALL oh-my-zsh
 RUN curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | \
     /bin/zsh || true
 
-COPY \
+#COPY .mackup.cfg
+COPY --chown=1000:1000 \
     .mackup.cfg \
     /home/user/
-RUN sudo chown 1000:1000 \
-    /home/user/.mackup.cfg \
