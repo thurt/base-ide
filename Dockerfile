@@ -58,19 +58,19 @@ RUN curl -L -o /usr/local/protoc.zip https://github.com/google/protobuf/releases
 
 #INSTALL scmpuff (number aliases for git)
 RUN curl -L https://github.com/mroth/scmpuff/releases/download/v${SCMPUFF_VERSION}/scmpuff_${SCMPUFF_VERSION}_linux_amd64.tar.gz | \
-    tar -C /usr/local/bin -zxv scmpuff_${SCMPUFF_VERSION}_linux_amd64/scmpuff --strip=1
+    tar -C /usr/local/bin -zx scmpuff_${SCMPUFF_VERSION}_linux_amd64/scmpuff --strip=1
 
 #INSTALL Docker client (excluding the daemon b/c i expect this container will i/a with host's daemon via docker.sock)
 RUN curl -L https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | \
-    tar -C /usr/local/bin -zxv docker/docker --strip=1
+    tar -C /usr/local/bin -zx docker/docker --strip=1
 
 #INSTALL Hub (command-line wrapper for git that makes you better at GitHub)
 RUN curl -L https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz | \
-    tar -C /usr/local -zxv --exclude=README.md --exclude=LICENSE --exclude=install --strip=1
+    tar -C /usr/local -zx --exclude=README.md --exclude=LICENSE --exclude=install --strip=1
 
 #INSTALL devd (a local webserver for developers)
 RUN curl -L https://github.com/cortesi/devd/releases/download/v${DEVD_VERSION}/devd-${DEVD_VERSION}-linux64.tgz | \
-    tar -C /usr/local/bin -zxv --strip=1
+    tar -C /usr/local/bin -zx --strip=1
 
 #SET LOCALE 
 RUN sed -i -e "s/# ${LOCALE} UTF-8/${LOCALE} UTF-8/" /etc/locale.gen && \
