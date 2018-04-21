@@ -99,9 +99,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle && \
     curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim && \
     git clone git://github.com/tpope/vim-sensible.git ~/.vim/bundle/vim-sensible && \
     git clone https://github.com/Valloric/YouCompleteMe ~/.vim/bundle/YouCompleteMe && \
-    git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree && \
-    git clone https://github.com/leafgarland/typescript-vim.git ~/.vim/bundle/typescript-vim && \
-    git clone https://github.com/prettier/vim-prettier ~/.vim/bundle/vim-prettier
+    git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree
 
 #complete YCM setup
 RUN cd /home/user/.vim/bundle/YouCompleteMe && \
