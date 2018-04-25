@@ -8,7 +8,8 @@ ENV LOCALE=en_US.UTF-8 \
     PYTHON_PIP_VERSION=10.0.0 \
     SCMPUFF_VERSION=0.2.1 \
     HUB_VERSION=2.2.9 \
-    DEVD_VERSION=0.8
+    DEVD_VERSION=0.8 \
+    TRAVIS_VERSION=1.8.8
 
 #openssl is at least required for python-pip
 RUN apt-get update && \
@@ -46,7 +47,7 @@ RUN pip install \
     rm -rf ~/.cache/pip/*
 
 RUN gem install tmuxinator && \
-    gem install travis && \
+    gem install travis -v ${TRAVIS_VERSION} && \
     gem cleanup
 
 #INSTALL protoc (protocol buffer compiler)
