@@ -10,7 +10,8 @@ ENV LOCALE=en_US.UTF-8 \
     HUB_VERSION=2.2.9 \
     DEVD_VERSION=0.8 \
     TRAVIS_VERSION=1.8.8 \
-    SHELLCHECK_VERSION=0.4.7
+    SHELLCHECK_VERSION=0.4.7 \
+    HADOLINT_VERSION=1.6.5
 
 #openssl is at least required for python-pip
 RUN apt-get update && \
@@ -83,6 +84,10 @@ RUN SHELLCHECK_DOMAIN=https://shellcheck.storage.googleapis.com/ && \
     sha512sum -c ${SHELLCHECK_FNAME}.sha512sum && \
     tar -C /usr/local/bin -xf ${SHELLCHECK_FNAME} shellcheck-v${SHELLCHECK_VERSION}/shellcheck --strip=1 && \
     rm ${SHELLCHECK_FNAME} ${SHELLCHECK_FNAME}.sha512sum 
+
+#INSTALL hadolint (a linter for Dockerfile)
+RUN curl -L -o /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64 && \
+    chmod +x /usr/local/bin/hadolint
 
 #SET LOCALE 
 RUN sed -i -e "s/# ${LOCALE} UTF-8/${LOCALE} UTF-8/" /etc/locale.gen && \
