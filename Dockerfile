@@ -9,7 +9,8 @@ ENV LOCALE=en_US.UTF-8 \
     SCMPUFF_VERSION=0.2.1 \
     HUB_VERSION=2.2.9 \
     DEVD_VERSION=0.8 \
-    TRAVIS_VERSION=1.8.8
+    TRAVIS_VERSION=1.8.8 \
+    SHELLCHECK_VERSION=0.4.7
 
 #openssl is at least required for python-pip
 RUN apt-get update && \
@@ -73,6 +74,16 @@ RUN curl -L https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-
 RUN curl -L https://github.com/cortesi/devd/releases/download/v${DEVD_VERSION}/devd-${DEVD_VERSION}-linux64.tgz | \
     tar -C /usr/local/bin -zx --strip=1
 
+# INSTALL shellcheck (a linter for bourne shell scripts)
+RUN SHELLCHECK_DOMAIN=https://shellcheck.storage.googleapis.com/ && \
+    SHELLCHECK_FNAME=shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz && \
+    cd /tmp && \
+    curl -L -O ${SHELLCHECK_DOMAIN}${SHELLCHECK_FNAME} && \
+    curl -L -O ${SHELLCHECK_DOMAIN}${SHELLCHECK_FNAME}.sha512sum && \
+    sha512sum -c ${SHELLCHECK_FNAME}.sha512sum && \
+    tar -C /usr/local/bin -xf ${SHELLCHECK_FNAME} shellcheck-v${SHELLCHECK_VERSION}/shellcheck --strip=1 && \
+    rm ${SHELLCHECK_FNAME} ${SHELLCHECK_FNAME}.sha512sum 
+
 #SET LOCALE 
 RUN sed -i -e "s/# ${LOCALE} UTF-8/${LOCALE} UTF-8/" /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
@@ -96,10 +107,18 @@ RUN echo 'FOR CROSS-VERIFICATION, PLEASE CHECK THAT THE SHA256 RSA HASH ON STDOU
 
 #INSTALL vim plugins
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
+    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \  
+    # pathogen.vim - vim plugin system
     curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim && \
+    # vim-sensible - sensible defaults for vim configuration
     git clone git://github.com/tpope/vim-sensible.git ~/.vim/bundle/vim-sensible && \
+    # ale.git - asynchronous lint plugin, finds linting programs in your path to provide realtime linting feedbck for various file types
+    git clone https://github.com/w0rp/ale.git ~/.vim/bundle/ale.git && \
+    # YouCompleteMe - syntax autocompletion engine for various languages. 
+    # must still install by providing certain language flags, ex: `cd ~/.vim/bundle/YouCompleteMe && ./install.py [--all/--somelanguage]
+    # (see docs for language flags available)
     git clone https://github.com/Valloric/YouCompleteMe ~/.vim/bundle/YouCompleteMe && \
+    # nerdtree - filetree explorer
     git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree
 
 #complete YCM setup
