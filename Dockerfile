@@ -11,7 +11,8 @@ ENV LOCALE=en_US.UTF-8 \
     DEVD_VERSION=0.8 \
     TRAVIS_VERSION=1.8.8 \
     SHELLCHECK_VERSION=0.4.7 \
-    HADOLINT_VERSION=1.6.5
+    HADOLINT_VERSION=1.6.5 \
+    MACKUP_VERSION=0.8.18
 
 #openssl is at least required for python-pip
 RUN apt-get update && \
@@ -44,8 +45,8 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python get-pip.py
  
 RUN pip install \
-    pip==${PYTHON_PIP_VERSION} \
-    mackup && \
+    pip=="${PYTHON_PIP_VERSION}" \
+    mackup=="${MACKUP_VERSION}" && \
     rm -rf ~/.cache/pip/*
 
 RUN gem install tmuxinator && \
