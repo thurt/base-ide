@@ -45,55 +45,55 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python get-pip.py
  
 RUN pip install \
-    pip=="${PYTHON_PIP_VERSION}" \
-    mackup=="${MACKUP_VERSION}" && \
+    pip=="$PYTHON_PIP_VERSION" \
+    mackup=="$MACKUP_VERSION" && \
     rm -rf ~/.cache/pip/*
 
 RUN gem install tmuxinator && \
-    gem install travis -v ${TRAVIS_VERSION} && \
+    gem install travis -v "$TRAVIS_VERSION" && \
     gem cleanup
 
 #INSTALL protoc (protocol buffer compiler)
-RUN curl -L -o /usr/local/protoc.zip https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip && \
+RUN curl -L -o /usr/local/protoc.zip https://github.com/google/protobuf/releases/download/v"$PROTOC_VERSION"/protoc-"$PROTOC_VERSION"-linux-x86_64.zip && \
     unzip /usr/local/protoc.zip -x readme.txt -d /usr/local && \
     rm /usr/local/protoc.zip && \
     chmod o+rx /usr/local/bin/protoc && \
     chmod -R o+rX /usr/local/include/google/
 
 #INSTALL scmpuff (number aliases for git)
-RUN curl -L https://github.com/mroth/scmpuff/releases/download/v${SCMPUFF_VERSION}/scmpuff_${SCMPUFF_VERSION}_linux_amd64.tar.gz | \
-    tar -C /usr/local/bin -zx scmpuff_${SCMPUFF_VERSION}_linux_amd64/scmpuff --strip=1
+RUN curl -L https://github.com/mroth/scmpuff/releases/download/v"$SCMPUFF_VERSION"/scmpuff_"$SCMPUFF_VERSION"_linux_amd64.tar.gz | \
+    tar -C /usr/local/bin -zx scmpuff_"$SCMPUFF_VERSION"_linux_amd64/scmpuff --strip=1
 
 #INSTALL Docker client (excluding the daemon b/c i expect this container will i/a with host's daemon via docker.sock)
-RUN curl -L https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | \
+RUN curl -L https://download.docker.com/linux/static/stable/x86_64/docker-"$DOCKER_VERSION".tgz | \
     tar -C /usr/local/bin -zx docker/docker --strip=1
 
 #INSTALL Hub (command-line wrapper for git that makes you better at GitHub)
-RUN curl -L https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz | \
+RUN curl -L https://github.com/github/hub/releases/download/v"$HUB_VERSION"/hub-linux-amd64-"$HUB_VERSION".tgz | \
     tar -C /usr/local -zx --exclude=README.md --exclude=LICENSE --exclude=install --strip=1
 
 #INSTALL devd (a local webserver for developers)
-RUN curl -L https://github.com/cortesi/devd/releases/download/v${DEVD_VERSION}/devd-${DEVD_VERSION}-linux64.tgz | \
+RUN curl -L https://github.com/cortesi/devd/releases/download/v"$DEVD_VERSION"/devd-"$DEVD_VERSION"-linux64.tgz | \
     tar -C /usr/local/bin -zx --strip=1
 
 # INSTALL shellcheck (a linter for bourne shell scripts)
 RUN SHELLCHECK_DOMAIN=https://shellcheck.storage.googleapis.com/ && \
-    SHELLCHECK_FNAME=shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz && \
+    SHELLCHECK_FNAME=shellcheck-v"$SHELLCHECK_VERSION".linux.x86_64.tar.xz && \
     cd /tmp && \
-    curl -L -O ${SHELLCHECK_DOMAIN}${SHELLCHECK_FNAME} && \
-    curl -L -O ${SHELLCHECK_DOMAIN}${SHELLCHECK_FNAME}.sha512sum && \
-    sha512sum -c ${SHELLCHECK_FNAME}.sha512sum && \
-    tar -C /usr/local/bin -xf ${SHELLCHECK_FNAME} shellcheck-v${SHELLCHECK_VERSION}/shellcheck --strip=1 && \
-    rm ${SHELLCHECK_FNAME} ${SHELLCHECK_FNAME}.sha512sum 
+    curl -L -O "$SHELLCHECK_DOMAIN""$SHELLCHECK_FNAME" && \
+    curl -L -O "$SHELLCHECK_DOMAIN""$SHELLCHECK_FNAME".sha512sum && \
+    sha512sum -c "$SHELLCHECK_FNAME".sha512sum && \
+    tar -C /usr/local/bin -xf "$SHELLCHECK_FNAME" shellcheck-v"$SHELLCHECK_VERSION"/shellcheck --strip=1 && \
+    rm "$SHELLCHECK_FNAME" "$SHELLCHECK_FNAME".sha512sum 
 
 #INSTALL hadolint (a linter for Dockerfile)
-RUN curl -L -o /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64 && \
+RUN curl -L -o /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/download/v"$HADOLINT_VERSION"/hadolint-Linux-x86_64 && \
     chmod +x /usr/local/bin/hadolint
 
 #SET LOCALE 
-RUN sed -i -e "s/# ${LOCALE} UTF-8/${LOCALE} UTF-8/" /etc/locale.gen && \
+RUN sed -i -e "s/# ""$LOCALE"" UTF-8/""$LOCALE"" UTF-8/" /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=$LOCALE
+    update-locale LANG="$LOCALE"
 
 #SETUP USER 
 RUN groupadd -g 1000 user && useradd -u 1000 -g 1000 -m user && \ 
