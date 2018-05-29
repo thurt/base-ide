@@ -38,7 +38,7 @@ RUN apt-get update && \
     less \
     && \
   apt-get clean && \
-  rm /var/lib/apt/lists/*_*
+  rm -rf /var/lib/apt/lists/*
 
 #distro packages dont have recent versions of pip
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
