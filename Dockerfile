@@ -36,6 +36,7 @@ RUN apt-get update && \
     zsh \
     htop \
     less \
+    exuberant-ctags \
     && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
@@ -126,8 +127,10 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle && \
     git clone https://github.com/Valloric/YouCompleteMe ~/.vim/bundle/YouCompleteMe && \
     # nerdtree - filetree explorer
     git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree && \
-    # ctrlp - fuzzy search for filename
-    git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim
+    # ctrlp.vim - fuzzy search for filename
+    git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim && \
+    # vim-gutentags - automatically manages creating and updating tags file for project
+    git clone https://github.com/ludovicchabant/vim-gutentags.git ~/.vim/bundle/vim-gutentags
 
 
 #complete YCM setup
