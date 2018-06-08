@@ -125,7 +125,10 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle && \
     # (see docs for language flags available)
     git clone https://github.com/Valloric/YouCompleteMe ~/.vim/bundle/YouCompleteMe && \
     # nerdtree - filetree explorer
-    git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree
+    git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree && \
+    # ctrlp - fuzzy search for filename
+    git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim
+
 
 #complete YCM setup
 RUN cd /home/user/.vim/bundle/YouCompleteMe && \
